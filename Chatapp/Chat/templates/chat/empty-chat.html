@@ -1,0 +1,232 @@
+{% extends 'chat/base.html' %}
+{% load static %}
+
+{% block title %}Chat App{% endblock %}
+
+{% block body %}
+<div id="container">
+    <aside>
+        <header>
+            <input id="logged-in-user" type="hidden" value="{{user.id}}">
+            <input id="other-user" type="hidden" value="{% if activeConversation.other_user == user %}{{activeConversation.first_user.id}}{% else %}{{activeConversation.other_user.id}}{% endif %}">
+            <h3 class="server-time" style="display: none;">{{ server_timestamp|date:"Y-m-d H:i:s" }}</h3>
+            <div class="aside-buttons">
+                <a href="/profile"><button class="aside-btn">Profile</button></a>
+                <a href="/logout"><button class="aside-btn">Logout</button></a>
+            </div>
+        </header>
+        <ul id="conversationList">
+            <li>
+                <a href="/chat/{{botConv.id}}">
+                    <img src="{% static '/images/mrcatbot.png' %}" alt="">
+                    <div>
+                        <h2>X1</h2>
+                        <h3>Chat With an AI Chatbot.</h3>
+                    </div>
+                </a>
+            </li>
+            {% for conversation in conversations %}
+                {% if conversation != botConv %}
+                <li>
+                    <a href="/chat/{{conversation.id}}">
+                        {% if user != conversation.first_user %}
+                            {% if conversation.first_user.profile.image_url != '' %}
+                                <img src="{{ conversation.first_user.profile.image_url }}" alt="Not found">
+                            {% else %}
+                                <img src="{% static '/images/user-light.png' %}" alt="not found">
+                            {% endif %}
+                        {% else %}
+                            {% if conversation.other_user.profile.image_url != '' %}
+                                <img src="{{ conversation.other_user.profile.image_url }}" alt="Not found">
+                            {% else %}
+                                <img src="{% static '/images/user-light.png' %}" alt="not found">
+                            {% endif %}
+                        {% endif %}
+                        <div>
+                            {% if user != conversation.first_user %}
+                                <h2>{{conversation.first_user}}</h2>
+                            {% else %}
+                                <h2>{{conversation.other_user}}</h2>
+                            {% endif %}
+                            <h3>
+                                <span class="orange">&#8226</span>
+                                @{{conversation.modified_at}}
+                            </h3>
+                        </div>
+                    </a>
+                </li>
+                {% endif %}
+            {% empty %}
+                <li>
+                    <div>
+                        <h2>X1</h2>
+                        <h3>Your Messages Will Appear Here!</h3>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    <main>
+        <!-- Empty main, as per your original page -->
+    </main>
+</div>
+
+<script>
+    const shrink=()=>{
+        var aside=document.querySelector("aside");
+        if(aside.offsetWidth==window.innerWidth)
+        aside.style.marginLeft = '-100%';
+    }
+    const goBack=()=>{
+        var aside=document.querySelector("aside");
+        aside.style.marginLeft = '0%';
+    }
+</script>
+
+<style>
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    background: #0b111a;
+}
+#container {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("{% static 'images/dark_mountains.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    gap: 2vw;
+}
+
+/* Sidebar Glassmorphism */
+aside {
+    background: rgba(21, 24, 32, 0.74);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.33);
+    border-radius: 24px;
+    min-width: 340px;
+    width: 380px;
+    max-width: 440px;
+    min-height: 600px;
+    max-height: 85vh;
+    margin: 36px 0 36px 36px;
+    padding: 34px 18px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 11;
+}
+
+aside header {
+    margin-bottom: 20px;
+}
+
+.aside-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.aside-btn {
+    background: linear-gradient(90deg, #6556ea, #5361e6);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 22px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px #181e2c44;
+    cursor: pointer;
+    transition: background 0.2s, color 0.18s;
+}
+.aside-btn:hover {
+    background: #8798e7;
+    color: #232948;
+}
+
+#conversationList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+#conversationList li {
+    margin-bottom: 16px;
+}
+#conversationList li a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(26,29,40,0.43);
+    padding: 15px 15px;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#conversationList li a:hover {
+    background: rgba(43,54,110,0.34);
+    box-shadow: 0 2px 12px #181e2c23;
+}
+#conversationList img {
+    width: 49px;
+    height: 49px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #23243cbb;
+    background: #222;
+}
+#conversationList h2 {
+    margin: 0;
+    font-size: 1.13rem;
+    color: #e2e5f0;
+    font-weight: 600;
+    letter-spacing: .01em;
+}
+#conversationList h3 {
+    margin: 2px 0 0 0;
+    font-size: .99rem;
+    color: #9ca3af;
+    font-weight: 400;
+}
+.orange {
+    color: #fda12b;
+    margin-right: 5px;
+}
+
+main {
+    flex: 1 1 auto;
+    background: rgba(12, 14, 24, 0.20);
+    /* mostly transparent glass, even if empty */
+    min-height: 400px;
+    height: 85vh;
+    margin: 36px 36px 36px 0;
+    border-radius: 26px;
+    box-shadow: 0 10px 34px #171d2a23;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: rgba(20,23,33,0.11);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(53,68,100,0.20);
+    border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(70,87,120,0.28);
+}
+@media (max-width: 1050px) {
+    #container { flex-direction: column; align-items: flex-start;}
+    aside, main { margin: 20px auto; width: 95vw; min-width: 0; }
+}
+@media (max-width: 750px) {
+    aside, main { width: 100vw; max-width: 100vw; min-width: 0;}
+    main, aside { border-radius: 0; box-shadow: none; margin: 0; padding: 0;}
+    #container { padding: 0; }
+}
+</style>
+{% endblock %}

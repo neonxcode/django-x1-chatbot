@@ -1,0 +1,78 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block link %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="relative min-h-screen bg-cover bg-center" style="background-image: url('{% static 'images/dark_mountains.png' %}');">
+  <!-- dark overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm"></div>
+
+  <div class="relative z-10 flex items-center justify-center py-20 px-4">
+    <div class="w-full max-w-xl bg-white bg-opacity-5 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-8">
+      
+      <!-- Back button -->
+      <div>
+        <a href="/" class="inline-flex items-center text-gray-200 hover:text-white">
+          <svg class="w-5 h-5 mr-2 transform rotate-180" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+          Back
+        </a>
+      </div>
+
+      <!-- Avatar -->
+      <div class="flex justify-center -mt-16">
+        {% if user.profile.image_url %}
+          <img src="{{ user.profile.image_url }}" 
+               alt="Profile picture"
+               class="w-32 h-32 rounded-full border-4 border-gray-700 shadow-lg object-cover hover:scale-110 transition-transform" />
+        {% else %}
+          <img src="{% static 'images/user.png' %}"
+               alt="Default avatar"
+               class="w-32 h-32 rounded-full border-4 border-gray-700 shadow-lg object-cover hover:scale-110 transition-transform" />
+        {% endif %}
+      </div>
+
+      <!-- Name & Edit -->
+      <div class="text-center space-y-2">
+        <h1 class="text-3xl font-semibold text-white">{{ user.first_name }} {{ user.last_name }}</h1>
+        <a href="/edit-profile" 
+           class="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-full transition">
+          Edit Profile
+        </a>
+      </div>
+
+      <!-- Info grid -->
+      <div class="grid grid-cols-1 gap-4 text-gray-300">
+        <div class="flex items-center space-x-3 p-4 bg-white bg-opacity-10 rounded-lg">
+          <span class="font-medium flex-1">Username:</span>
+          <span class="font-semibold text-white">{{ user.username }}</span>
+        </div>
+        <div class="flex items-center space-x-3 p-4 bg-white bg-opacity-10 rounded-lg">
+          <span class="font-medium flex-1">First Name:</span>
+          <span class="font-semibold text-white">{{ user.first_name }}</span>
+        </div>
+        <div class="flex items-center space-x-3 p-4 bg-white bg-opacity-10 rounded-lg">
+          <span class="font-medium flex-1">Last Name:</span>
+          <span class="font-semibold text-white">{{ user.last_name }}</span>
+        </div>
+        <div class="flex items-center space-x-3 p-4 bg-white bg-opacity-10 rounded-lg">
+          <span class="font-medium flex-1">Email Address:</span>
+          <span class="font-semibold text-white">{{ user.email }}</span>
+        </div>
+        <div class="flex items-center space-x-3 p-4 bg-white bg-opacity-10 rounded-lg">
+          <span class="font-medium flex-1">Password:</span>
+          <span class="italic text-sm text-gray-400">•••••••••••</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
