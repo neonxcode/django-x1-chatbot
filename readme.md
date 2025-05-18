@@ -2,6 +2,10 @@
 > the app work best with python 3.9 and this is a django project
 > and use your own gemini ai api
 
+# Demo video.
+
+![[demo.mp4]]
+
   
 # how to run the app
 
