@@ -4,7 +4,7 @@
 
 # Demo video.
 
-![[demo-video.mp4]]
+![Watch demo video](https://raw.githubusercontent.com/neonxcode/django-x1-chatbot/main/demo/demo-video.mp4)
 
 # how to run the app
 
