@@ -6,7 +6,6 @@
 
 ![[demo.mp4]]
 
-  
 # how to run the app
 
 1. make the env using python
