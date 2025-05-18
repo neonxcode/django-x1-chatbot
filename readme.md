@@ -4,7 +4,7 @@
 
 # Demo video.
 
-![[demo.mp4]]
+![[demo-video.mp4]]
 
 # how to run the app
 
